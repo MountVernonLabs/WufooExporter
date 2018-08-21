@@ -17,14 +17,30 @@ $form_count = 1;
 // Loop through forms
 foreach ($forms as $form){
   echo $form->{'Hash'}." | ";
-  echo $form->{'Name'}."\n";
+  echo $form->{'Name'}." | ";
   $form_count = $form_count + 1;
 
+  // Look up how many entries there are so we can determine how much pagination is needed
+  $entries_count = $wrapper->getEntryCount($form->{'Hash'});
+  $pages = ceil($entries_count/100);
+  echo " | Entries: ".$entries_count." (".$pages.") | Getting Page: ";
+
   // Get entries and write them to a file
-  $entries = $wrapper->getEntries($form->{'Hash'});
-  file_put_contents("export/".preg_replace('/[^\w\d]+/', '-', $form->{'Name'}).".txt", json_encode($entries));
-  // Sleep for a minute to prenvent hitting API rate limit
-  sleep(60);
+  $entries_data = "";
+  $start_count = 0;
+  $loop_count = 0;
+
+  while($loop_count < $pages){
+    echo " ".($loop_count+1)." ";
+    $entries = $wrapper->getEntries($form->{'Hash'},"forms","?pageStart=".$start_count."&pageSize=100");
+    $entries_data = $entries_data.json_encode($entries);
+    $start_count = $start_count + 100;
+    $loop_count++;
+    // Sleep for a minute to prevent hitting API rate limit
+    sleep(5);
+  }
+  echo "\n";
+  file_put_contents("export/".preg_replace('/[^\w\d]+/', '-', $form->{'Name'}).".txt", $entries_data);
 }
 
 echo "\n\n".$form_count." total forms\n\n";

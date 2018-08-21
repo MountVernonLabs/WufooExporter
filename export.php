@@ -23,7 +23,7 @@ foreach ($forms as $form){
   // Look up how many entries there are so we can determine how much pagination is needed
   $entries_count = $wrapper->getEntryCount($form->{'Hash'});
   $pages = ceil($entries_count/100);
-  echo " | Entries: ".$entries_count." (".$pages.") | Getting Page: ";
+  echo "Entries: ".$entries_count." (".$pages.") | Getting Page: ";
 
   // Get entries and write them to a file
   $entries_data = "";

@@ -10,6 +10,10 @@ Extracts all data collected from every Wufoo form in an account.  We are using t
 `php export.php`
 - This will export all of your forms as json encoded values to the export folder
 
+## Searching through the results
+- You can run the following command to then search within the files to find a string
+`sh find.sh YOURTEXT`
+
 ## A few notes
 - We're pausing for 1 minute between form exports to prevent hittting the rate limit of the Wufoo API
 - As a result of above if you have a lot of forms this script can take some time to run
